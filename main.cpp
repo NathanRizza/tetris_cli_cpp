@@ -13,7 +13,7 @@ bool lost =false;
 bool board[boardy][boardx] = {
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
-					{0,0,0,0,1,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
@@ -37,6 +37,7 @@ void printBoard();
 void frameRule();
 void frame();
 bool canMoveDown();
+void movePieceDown();
 //---------------------
 
 
@@ -44,6 +45,7 @@ int main(void)
 {
 	srand (time(NULL));
 	spawnPiece();
+	//movePieceDown();
 	frame();
 	canMoveDown();
 	//while(!lost)
@@ -140,11 +142,11 @@ void spawnPiece(){
 
 //I am very proud of this function
 bool canMoveDown(){
+	
 	int lowestInX[boardx]={0,0,0,0,0,0,0,0,0,0};
-
+	
 		for(int i=0;i<boardy;i++)
-		{
-			
+		{		
 			for(int j=0;j<boardx;j++)
 			{
 				if(piecePos[i][j])
@@ -163,6 +165,7 @@ bool canMoveDown(){
 			return false;
 		}
 	}
+	
 	cout<<"can move down"<<endl;
 	return true;
 }
@@ -192,8 +195,7 @@ void clearScreen(){
 	cout << "\033[2J\033[1;1H";
 }
 
-void frameRule()
-{
+void frameRule(){
 	for(int i=0;i<30;i++)
 	{
 		frame();
@@ -202,10 +204,41 @@ void frameRule()
 	}
 }
 
-void frame()
-{
+void frame(){
 	printBoard();
 }
 
+void updateBoard()
+{
+	if(canMoveDown())
+	{
+		
+	}
+}
 
+void movePieceDown()
+{
+	for(int i=0;i<boardy;i++)
+	{
+		for(int j=0;j<boardx;j++)
+		{
+			if(piecePos[i][j])
+			{
+				board[i-1][j-1]=true;
+			}
+		}
+	}
+	
+	for(int i=0;i<boardy;i++)
+	{
+		for(int j=0;j<boardx;j++)
+		{
+			if(piecePos[i][j])
+			{
+				piecePos[i][j]=false;
+				piecePos[i-1][j-1]=true;
+			}
+		}
+	}
+}
 
