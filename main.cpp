@@ -7,13 +7,13 @@ using namespace std;
 
 const int boardx =10, boardy=15;
 int curPiece =0;
-bool piecePos[boardx][boardy];
+bool piecePos[boardy][boardx];
 bool lost =false;
 
 bool board[boardy][boardx] = {
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
-					{0,0,0,0,0,0,0,0,0,0},
+					{0,0,0,0,1,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
@@ -159,7 +159,7 @@ bool canMoveDown(){
 	
 	for(int i=0;i<boardx;i++)
 	{
-		if(board[(lowestInX[i])-1][i])
+		if(board[(lowestInX[i])+1][i])
 		{
 			cout<<"cannot move down"<<endl;
 			return false;
