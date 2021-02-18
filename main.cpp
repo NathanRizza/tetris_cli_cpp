@@ -13,7 +13,7 @@ bool lost =false;
 bool board[boardy][boardx] = {
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
-					{0,0,0,0,1,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0,0,0},
@@ -38,6 +38,8 @@ void frameRule();
 void frame();
 bool canMoveDown();
 void movePieceDown();
+void updateBoard();
+void lockPiece();
 //---------------------
 
 
@@ -45,13 +47,10 @@ int main(void)
 {
 	srand (time(NULL));
 	spawnPiece();
-	//movePieceDown();
-	frame();
-	canMoveDown();
-	//while(!lost)
-	//{
-	//	frameRule();
-	//}
+	while(!lost)
+    {
+		frameRule();
+	}
 	cout<<"GAME OVER"<<endl;
 }
 
@@ -63,7 +62,7 @@ void printBoard(){
 		
 		for(int j=0;j<boardx;j++)
 		{
-			if(board[i][j])
+			if(board[i][j] || piecePos[i][j])
 			{
 				cout<<'#';
 			}
@@ -159,14 +158,14 @@ bool canMoveDown(){
 	
 	for(int i=0;i<boardx;i++)
 	{
-		if(board[(lowestInX[i])+1][i])
+		if(board[(lowestInX[i])+1][i] || lowestInX[i] == 14)
 		{
-			cout<<"cannot move down"<<endl;
+			//cout<<"cannot move down"<<endl;
 			return false;
 		}
 	}
 	
-	cout<<"can move down"<<endl;
+	//cout<<"can move down"<<endl;
 	return true;
 }
 
@@ -177,7 +176,6 @@ void addAndCheck(int y,int x){
 	}
 	else
 	{
-		board[y][x] = true;
 		piecePos[y][x] =true;
 	}
 }
@@ -196,15 +194,18 @@ void clearScreen(){
 }
 
 void frameRule(){
+	
 	for(int i=0;i<30;i++)
 	{
 		frame();
 		usleep(33333);
 		clearScreen();
 	}
+	updateBoard();
 }
 
-void frame(){
+void frame()
+{
 	printBoard();
 }
 
@@ -212,11 +213,39 @@ void updateBoard()
 {
 	if(canMoveDown())
 	{
-		
+		movePieceDown();
+	}
+	else
+	{
+		lockPiece();
 	}
 }
 
 void movePieceDown()
+{
+	bool oldPiecePos[boardy][boardx];
+	
+	for(int i=0;i<boardy;i++)
+	{
+		for(int j=0;j<boardx;j++)
+		{
+				oldPiecePos[i][j] = piecePos[i][j];
+				piecePos[i][j]=false;
+		}
+	}
+	for(int i=0;i<boardy;i++)
+	{
+		for(int j=0;j<boardx;j++)
+		{
+			if(oldPiecePos[i][j])
+			{
+				piecePos[i+1][j]= true;
+			}
+		}
+	}
+}
+
+void lockPiece()
 {
 	for(int i=0;i<boardy;i++)
 	{
@@ -224,21 +253,11 @@ void movePieceDown()
 		{
 			if(piecePos[i][j])
 			{
-				board[i-1][j-1]=true;
+				board[i][j]=true;
 			}
+			piecePos[i][j]=false;
 		}
 	}
-	
-	for(int i=0;i<boardy;i++)
-	{
-		for(int j=0;j<boardx;j++)
-		{
-			if(piecePos[i][j])
-			{
-				piecePos[i][j]=false;
-				piecePos[i-1][j-1]=true;
-			}
-		}
-	}
+	spawnPiece();
 }
 
