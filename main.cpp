@@ -40,11 +40,16 @@ bool canMoveDown();
 void movePieceDown();
 void updateBoard();
 void lockPiece();
+void getMove();
 //---------------------
 
 
 int main(void)
 {
+	while(true)
+	{
+	getMove();
+	}
 	srand (time(NULL));
 	spawnPiece();
 	while(!lost)
@@ -54,12 +59,11 @@ int main(void)
 	cout<<"GAME OVER"<<endl;
 }
 
-void printBoard(){
-	
+void printBoard()
+{
 	for(int i=0;i<boardy;i++)
 	{
 		cout<<"|";
-		
 		for(int j=0;j<boardx;j++)
 		{
 			if(board[i][j] || piecePos[i][j])
@@ -71,7 +75,6 @@ void printBoard(){
 				cout<<' ';
 			}
 		}
-		
 		cout<<"|"<<endl;
 	}
 	cout<<"|----------|"<<endl;
@@ -79,7 +82,6 @@ void printBoard(){
 
 void spawnPiece(){
 	int p = rand() % 7;
-	
 	if(p==0)//long
 	{
 		addAndCheck(0,3);
@@ -164,12 +166,12 @@ bool canMoveDown(){
 			return false;
 		}
 	}
-	
 	//cout<<"can move down"<<endl;
 	return true;
 }
 
-void addAndCheck(int y,int x){
+void addAndCheck(int y,int x)
+{
 	if(checkOverLap(y,x))
 	{
 		gameOver();
@@ -181,20 +183,23 @@ void addAndCheck(int y,int x){
 }
 
 //returns true if overlap
-bool checkOverLap(int y,int x){
+bool checkOverLap(int y,int x)
+{
 	return board[y][x];
 }
 
-void gameOver(){
+void gameOver()
+{
 	lost=true;
 }
 
-void clearScreen(){
+void clearScreen()
+{
 	cout << "\033[2J\033[1;1H";
 }
 
-void frameRule(){
-	
+void frameRule()
+{
 	for(int i=0;i<30;i++)
 	{
 		frame();
@@ -224,7 +229,6 @@ void updateBoard()
 void movePieceDown()
 {
 	bool oldPiecePos[boardy][boardx];
-	
 	for(int i=0;i<boardy;i++)
 	{
 		for(int j=0;j<boardx;j++)
@@ -261,3 +265,22 @@ void lockPiece()
 	spawnPiece();
 }
 
+void getMove()
+{
+	char data[25] ="temp";
+	cin.get(data,20);
+	for(int i=0;i<20;i++)
+	{
+	    if(data[i] == ('q'||'w'||'e'||'a'||'s'||'d'))
+		{
+			move(data[i]);
+			return;
+		}
+	}
+	return;
+}
+
+void move(char direction)
+{
+	cout<<"yay"<<endl;
+}
